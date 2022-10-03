@@ -1,0 +1,8 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Ressources:
+  BOSS:
+    Type: AWS::IAM::Group
+    Properties: 
+      GroupName: Dev
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess

@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  BOSS:
+    Type: AWS::IAM::Group
+    Properties: 
+      GroupName: Dev
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+  CREATEFOOINBOSS:
+    Type: AWS::IAM::User
+    Properties: 
+      Groups: 
+        - Ref: BOSS
+      LoginProfile: 
+        Password: mypassword
+      UserName: foo
+  CREATEBAAINBOSS:
+    Type: AWS::IAM::User
+    Properties: 
+      Groups: 
+        - Ref: BOSS
+      LoginProfile: 
+        Password: mypassword
+      UserName: baa
+
