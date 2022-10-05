@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 
-Paramet
+Parameters:
   Eng:
     Type: String
     Description: 'This is my job'
