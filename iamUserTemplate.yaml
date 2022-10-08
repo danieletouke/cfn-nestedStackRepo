@@ -3,13 +3,15 @@ Resources:
   CREATEFOO:
     Type: AWS::IAM::User
     Properties: 
-      Groups: [Dev]
+      Groups: 
+        - Dev
       LoginProfile: 
-        Password: mypassword
+        Password: mypassword1984@
       UserName: foo
+    DependsOn: NestedStack
 
   NestedStack:
     Type: 'AWS::CloudFormation::Stack'
     Properties:
-      TemplateURL: >-
-        https://assignment-codix-1.s3.amazo naws.com/cfn-nested-stack.yaml
+      TemplateURL: https://assignment-codix-1.s3.amazonaws.com/cfn-nested-stack.yaml
+      TimeoutInMinutes: '60'
