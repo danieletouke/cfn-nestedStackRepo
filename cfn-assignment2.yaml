@@ -77,7 +77,7 @@ Outputs:
 
   USER3ACCESSKEY:
     Value: !Ref USERIAMTESTKEY
-    Description: AWS access key for user USERTEST
+    Description: AWS access key for user INSERT THE USERNAME OF USERTEST HERE!!!
   USER3SECRETKEY:
     Value:
       !Join
