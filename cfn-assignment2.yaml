@@ -1,13 +1,13 @@
 AWSTemplateFormatVersion: '2010-09-09'
-
 Parameters:
   Eng:
     Type: String
-    Description: 'This is my job'
-  User:
+    Description: 'Group name to be created'
+    Default: Engineer
+  USERIAMTEST:
     Type: String
-    Description: 'nom utilisateur'
-
+    Description: 'Type the user name'
+    Default: userIAM
 Resources:
   GROUP:
     Type: AWS::IAM::Group
@@ -15,7 +15,6 @@ Resources:
       GroupName: !Ref Eng
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
-
   USERFOO:
     Type: AWS::IAM::User
     Properties: 
@@ -24,7 +23,25 @@ Resources:
       LoginProfile: 
         Password: mypassword19QA@
       UserName: foo
-
+  
+  FOOKEY:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName:
+        !Ref USERFOO
+  
+  BAAKEY:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName:
+        !Ref USERBAA
+  
+  USERIAMTESTKEY:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName:
+        !Ref USERTEST
+  
   USERBAA:
     Type: AWS::IAM::User
     Properties: 
@@ -33,18 +50,42 @@ Resources:
       LoginProfile: 
         Password: mypassword19AQ@
       UserName: baa
-
-
-User3
-Type: AWS::IAM::User
-Properties: 
-  Groups: 
-    - admins 
-    - developers
-    - !Ref GROUP
-  LoginProfile: 
-    klfsdert849@
-  ManagedPolicyArns: 
-    - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+  USERTEST:
+    Type: AWS::IAM::User
+    Properties: 
+      Groups: 
+        - admins 
+        - developers
+        - !Ref GROUP
+      LoginProfile: 
+        Password: mypassword19QA@
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+      UserName: !Ref USERIAMTEST
+Outputs:
+  FOOACCESSKEY:
+    Value: !Ref FOOKEY
+    Description: 'AWS access key Id for user FOO'
+  FOOSECRETKEY:
+    Value: !GetAtt [FOOKEY, SecretAccessKey]
   
-  UserName: !Ref User
+  BAAACCESSKEY:
+    Value: !Ref BAAKEY
+    Description: 'AWS access key for user BAA'
+  BAASECRETKEY:
+    Value: !GetAtt [BAAKEY, SecretAccessKey]
+
+  USER3ACCESSKEY:
+    Value: !Ref USERIAMTESTKEY
+    Description: AWS access key for user USERTEST
+  USER3SECRETKEY:
+    Value:
+      !Join
+      - '  '
+      - - 'Secret Access Key for: '
+        - !Ref USERIAMTEST
+        - !GetAtt [USERIAMTESTKEY, SecretAccessKey]
+        - 'Account Id'
+        - !Ref AWS::AccountId
+
+    
