@@ -15,7 +15,8 @@ Resources:
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
           SubnetId: "subnet-07764e6319704cb48" #Copy the subnetId here
-          GroupSet: sg-07072bbbaea42e6d4 #Copy your security group Id here
+          GroupSet: 
+          - sg-07072bbbaea42e6d4 #Copy your security group Id here
         UserData:
           Fn::Base64: !Sub |
             #!/bin/bash
