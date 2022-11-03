@@ -1,0 +1,43 @@
+Resources:
+
+  # ec2Profile:
+  #   Type: AWS::IAM::InstanceProfile
+  #   Properties: 
+  #     Path: /
+  #     Roles: 
+  #      - ec2-full-s3-access
+
+  MyEC2Instance: 
+      Type: AWS::EC2::Instance
+      Properties: 
+        ImageId: "ami-026b57f3c383c2eec" #for us-east-1
+        InstanceType: t2.nano
+        #IamInstanceProfile: !Ref ec2Profile
+        KeyName: "nvkp-dev"  #copy your key pair name here
+        BlockDeviceMappings: 
+        - DeviceName: "/dev/xvda"
+          Ebs: 
+            VolumeType: "gp2"
+            # Iops: "100"
+            DeleteOnTermination: "true"
+            VolumeSize: "10"
+        NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          SubnetId: "subnet-07764e6319704cb48" #Copy the subnetId here
+          GroupSet: 
+          - sg-07072bbbaea42e6d4 #Copy your security group Id here
+        UserData:
+          Fn::Base64: !Sub |
+            #!/bin/bash
+            
+            # wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+            # rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+            # yum upgrade -y
+            #yum install httpd -y
+            #systemctl enable --now httpd
+            
+            yum update -y
+            yum install git -y
+            amazon-linux-extras install java-openjdk11 -y
+            useradd jenkinsslave1

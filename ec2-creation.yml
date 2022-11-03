@@ -1,0 +1,94 @@
+  MyEC2Instance: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId: "ami-026b57f3c383c2eec" #for us-east-1
+      KeyName: "nvkp-dev"
+      BlockDeviceMappings: 
+      - DeviceName: "/dev/sdm"
+        Ebs: 
+          VolumeType: "gp2"
+          Iops: "100"
+          DeleteOnTermination: "true"
+          VolumeSize: "40"
+      - DeviceName: "/dev/sdk"
+        NoDevice: {}
+      NetworkInterfaces: 
+      - AssociatePublicIpAddress: "true"
+        DeviceIndex: "0"
+        GroupSet: 
+          - Ref: "myVPCEC2SecurityGroup" #I will copy the vpcid here
+        SubnetId: 
+          Ref: "PublicSubnet" #I will copy the subnetId here
+      SecurityGroupIds: sg-07072bbbaea42e6d4
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          yum update –y
+          wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+          rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+          yum upgrade -y
+          amazon-linux-extras install java-openjdk11 -y
+          yum install jenkins -y
+          systemctl enable --now jenkins
+
+
+    
+Type: AWS::EC2::Instance
+Properties: 
+  AdditionalInfo: String
+  Affinity: String
+  AvailabilityZone: String
+  BlockDeviceMappings: 
+    - BlockDeviceMapping
+  CpuOptions: 
+    CpuOptions
+  CreditSpecification: 
+    CreditSpecification
+  DisableApiTermination: Boolean
+  EbsOptimized: Boolean
+  ElasticGpuSpecifications: 
+    - ElasticGpuSpecification
+  ElasticInferenceAccelerators: 
+    - ElasticInferenceAccelerator
+  EnclaveOptions: 
+    EnclaveOptions
+  HibernationOptions: 
+    HibernationOptions
+  HostId: String
+  HostResourceGroupArn: String
+  IamInstanceProfile: String
+  ImageId: String
+  InstanceInitiatedShutdownBehavior: String
+  InstanceType: String
+  Ipv6AddressCount: Integer
+  Ipv6Addresses: 
+    - InstanceIpv6Address
+  KernelId: String
+  KeyName: String
+  LaunchTemplate: 
+    LaunchTemplateSpecification
+  LicenseSpecifications: 
+    - LicenseSpecification
+  Monitoring: Boolean
+  NetworkInterfaces: 
+    - NetworkInterface
+  PlacementGroupName: String
+  PrivateDnsNameOptions: 
+    PrivateDnsNameOptions
+  PrivateIpAddress: String
+  PropagateTagsToVolumeOnCreation: Boolean
+  RamdiskId: String
+  SecurityGroupIds: 
+    - String
+  SecurityGroups: 
+    - String
+  SourceDestCheck: Boolean
+  SsmAssociations: 
+    - SsmAssociation
+  SubnetId: String
+  Tags: 
+    - Tag
+  Tenancy: String
+  UserData: String
+  Volumes: 
+    - Volume

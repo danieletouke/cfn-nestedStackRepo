@@ -1,8 +1,18 @@
 Resources:
+
+  ec2Profile:
+    Type: AWS::IAM::InstanceProfile
+    Properties: 
+      Path: /
+      Roles: 
+       - ec2-full-s3-access
+
   MyEC2Instance: 
       Type: AWS::EC2::Instance
       Properties: 
         ImageId: "ami-026b57f3c383c2eec" #for us-east-1
+        InstanceType: t3.xlarge
+        IamInstanceProfile: !Ref ec2Profile
         KeyName: "nvkp-dev"  #copy your key pair name here
         BlockDeviceMappings: 
         - DeviceName: "/dev/sdm"
@@ -20,10 +30,11 @@ Resources:
         UserData:
           Fn::Base64: !Sub |
             #!/bin/bash
-            yum update –y
+            yum update ?y
             wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
             rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
             yum upgrade -y
             amazon-linux-extras install java-openjdk11 -y
             yum install jenkins -y
+            yum install git -y
             systemctl enable --now jenkins

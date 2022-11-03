@@ -54,8 +54,6 @@ Resources:
     Type: AWS::IAM::User
     Properties: 
       Groups: 
-        - admins 
-        - developers
         - !Ref GROUP
       LoginProfile: 
         Password: mypassword19QA@
